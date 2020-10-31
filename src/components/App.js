@@ -4,14 +4,17 @@ import "./../styles/App.css";
 function App() {
   const [list, setlist] = React.useState([]);
   const [task, settask] = React.useState("");
+  const [currEdit, setcurrEdit] = React.useState("");
   const handle = (idx) => {
     let coplist = [...list];
     coplist[idx].edit = true;
     setlist(coplist);
+    setcurrEdit(coplist[idx].name);
   };
   const handleSaveEdit = (idx) => {
     let coplist = [...list];
     coplist[idx].edit = false;
+    coplist[idx].name = currEdit;
     setlist(coplist);
   };
 
@@ -19,9 +22,7 @@ function App() {
     if (" " === text || text === "") {
       return;
     }
-    let copylist = [...list];
-    copylist.map((todo, i) => (i === idx ? (todo.name = text) : todo));
-    setlist(copylist);
+    setcurrEdit(text);
   };
   const handleDelete = (ev, idx) => {
     let copylist = [];
@@ -61,11 +62,11 @@ function App() {
           </button>
           {task.edit ? (
             <>
-              <textarea
-                value={task.name}
+              <input
+                value={currEdit}
                 onChange={(event) => handleEdit(event.target.value, idx)}
                 className="editTask"
-              ></textarea>
+              ></input>
               <button
                 className="saveTask"
                 onClick={(event) => handleSaveEdit(idx)}
@@ -77,11 +78,11 @@ function App() {
         </li>
       ))}
       <div id="main">
-        <textarea
+        <input
           id="task"
           value={task}
           onChange={(evnt) => handleChnage(evnt.target.value)}
-        ></textarea>
+        ></input>
         <button id="btn" onClick={handleClick}>
           add
         </button>
