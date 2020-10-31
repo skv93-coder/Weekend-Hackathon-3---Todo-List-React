@@ -34,15 +34,15 @@ function App() {
     setlist(copylist);
   };
   const handleClick = () => {
+    if (task === " " || task === "") {
+      return;
+    }
     let copylist = [...list];
     copylist.push({ name: task, edit: false });
     settask("");
     setlist(copylist);
   };
   const handleChnage = (text) => {
-    if (text === " " || text === "") {
-      return;
-    }
     settask(text);
   };
   return (
