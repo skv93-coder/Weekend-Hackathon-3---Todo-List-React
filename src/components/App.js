@@ -18,7 +18,7 @@ function App() {
     setlist(coplist);
   };
 
-  const handleEdit = (text, idx) => {
+  const handleEdit = (text) => {
     if (" " === text || text === "") {
       return;
     }
@@ -64,7 +64,7 @@ function App() {
             <>
               <input
                 value={currEdit}
-                onChange={(event) => handleEdit(event.target.value, idx)}
+                onChange={(event) => handleEdit(event.target.value)}
                 className="editTask"
               ></input>
               <button
