@@ -65,11 +65,11 @@ function App() {
           </button>
           {task.edit ? (
             <>
-              <input
+              <textarea
                 value={currEdit}
                 onChange={(event) => handleEdit(event.target.value)}
                 className="editTask"
-              ></input>
+              ></textarea>
               <button
                 className="saveTask"
                 onClick={(event) => handleSaveEdit(idx)}
@@ -81,11 +81,11 @@ function App() {
         </li>
       ))}
       <div id="main">
-        <input
+        <textarea
           id="task"
           value={task}
           onChange={(evnt) => handleChnage(evnt.target.value)}
-        ></input>
+        ></textarea>
         <button id="btn" onClick={handleClick}>
           add
         </button>
