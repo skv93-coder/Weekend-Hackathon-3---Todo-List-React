@@ -13,7 +13,7 @@ function App() {
   };
   const handleSaveEdit = (idx) => {
     let coplist = [...list];
-    if(currEdit||currEdit===" "){
+    if(currEdit===""||currEdit===" "){
       return ;
     }
     coplist[idx].edit = false;
