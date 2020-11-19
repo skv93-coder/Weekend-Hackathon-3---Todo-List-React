@@ -1,97 +1,101 @@
+
+import { useState } from "react";
 import React from "react";
-import "./../styles/App.css";
 
-function App() {
-  const [list, setlist] = React.useState([]);
-  const [task, settask] = React.useState("");
-  const [currEdit, setcurrEdit] = React.useState("");
-  const handle = (idx) => {
-    let coplist = [...list];
-    coplist[idx].edit = true;
-    setlist(coplist);
-    setcurrEdit(coplist[idx].name);
-  };
-  const handleSaveEdit = (idx) => {
-    let coplist = [...list];
-    if(currEdit===""||currEdit===" "){
-      return ;
-    }
-    coplist[idx].edit = false;
-    coplist[idx].name = currEdit;
-    setlist(coplist);
+export default function App() {
+  const [inputBox, setInputBox] = useState("");
+  const [editBoxText, setEditBoxText] = useState("");
+  const [toDoList, setToDoList] = useState([]);
+  const [taskId, setTaskId] = useState(0);
+  const [showEditBox, setShowEditBox] = useState(false);
+  const [editId, setEditId] = useState(1);
+
+  const handleInputBoxChange = (event) => {
+    let text = event.target.value;
+    setInputBox(text);
   };
 
-  const handleEdit = (text) => {
-    // if (" " === text || text === "") {
-    //   return;
-    // }
-    setcurrEdit(text);
+  const handleAddTask = () => {
+    let tempList = [...toDoList];
+    tempList.push({ id: taskId, text: inputBox });
+    setTaskId(taskId + 1);
+    setToDoList(tempList);
+    setInputBox("");
   };
-  const handleDelete = (ev, idx) => {
-    let copylist = [];
-    for (let i = 0; i < list.length; i++) {
-      if (idx === i) {
-      } else {
-        copylist.push(list[i]);
+
+  const handleDelete = (id) => {
+    let newToDoList = toDoList.filter((task) => task !== toDoList[id]);
+    setToDoList(newToDoList);
+  };
+
+  const handleEdit = (id) => {
+    setShowEditBox(!showEditBox);
+    setEditId(id);
+  };
+
+  const handleEditBox = (event) => {
+    let text = event.target.value;
+    setEditBoxText(text);
+  };
+
+  const saveEdit = () => {
+    const tempList = [...toDoList];
+    tempList.forEach((task) => {
+      if (task.id === editId) {
+        task.text = editBoxText;
       }
-    }
-    setlist(copylist);
+    });
+    setToDoList(tempList);
+    setShowEditBox(false);
+    setEditBoxText("");
   };
-  const handleClick = () => {
-    if (task === " " || task === "") {
-      return;
-    }
-    let copylist = [...list];
-    copylist.push({ name: task, edit: false });
-    settask("");
-    setlist(copylist);
-  };
-  const handleChnage = (text) => {
-    settask(text);
-  };
+
   return (
     <>
-      {list.map((task, idx) => (
-        <li className="list">
-          {task.name}
-          <button className="edit" onClick={(event) => handle(idx)}>
-            edit
-          </button>
-          <button
-            className="delete"
-            onClick={(event) => handleDelete(event.target.innerText, idx)}
-          >
-            delete
-          </button>
-          {task.edit ? (
-            <>
-              <textarea
-                value={currEdit}
-                onChange={(event) => handleEdit(event.target.value)}
-                className="editTask"
-              ></textarea>
-              <button
-                className="saveTask"
-                onClick={(event) => handleSaveEdit(idx)}
-              >
-                save
-              </button>
-            </>
-          ) : null}
-        </li>
-      ))}
       <div id="main">
-        <textarea
-          id="task"
-          value={task}
-          onChange={(evnt) => handleChnage(evnt.target.value)}
-        ></textarea>
-        <button id="btn" onClick={handleClick}>
-          add
+        <textarea id="task" value={inputBox} onChange={handleInputBoxChange} />
+        <button id="btn" disabled={!inputBox} onClick={handleAddTask}>
+          Add Task
         </button>
+        <hr />
+        {toDoList.length === 0 ? (
+          <div>No Tasks</div>
+        ) : (
+          <ul>
+            {toDoList.map((task, id) => {
+              return (
+                <>
+                  <li key={id} className="list">
+                    {task.text}
+                  </li>
+                  <button className="edit" onClick={() => handleEdit(id)}>
+                    Edit
+                  </button>
+                  <button className="delete" onClick={() => handleDelete(id)}>
+                    Delete
+                  </button>
+                </>
+              );
+            })}
+          </ul>
+        )}
+        {showEditBox ? (
+          <div>
+            <textarea
+              className="editTask"
+              value={editBoxText}
+              onChange={handleEditBox}
+            />
+            <button
+              className="saveTask"
+              disabled={!editBoxText}
+              onClick={() => saveEdit()}
+            >
+              Save
+            </button>
+          </div>
+        ) : null}
       </div>
     </>
   );
 }
-
-export default App;
