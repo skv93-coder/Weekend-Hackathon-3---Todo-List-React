@@ -13,15 +13,18 @@ function App() {
   };
   const handleSaveEdit = (idx) => {
     let coplist = [...list];
+    if(currEdit||currEdit===" "){
+      return ;
+    }
     coplist[idx].edit = false;
     coplist[idx].name = currEdit;
     setlist(coplist);
   };
 
   const handleEdit = (text) => {
-    if (" " === text || text === "") {
-      return;
-    }
+    // if (" " === text || text === "") {
+    //   return;
+    // }
     setcurrEdit(text);
   };
   const handleDelete = (ev, idx) => {
